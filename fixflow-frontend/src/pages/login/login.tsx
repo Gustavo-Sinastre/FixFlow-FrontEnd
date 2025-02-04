@@ -1,11 +1,15 @@
 // src/pages/login/login.tsx
+import axiosInstance from '../../api/axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 
 export const LoginPage = () => {
 
     const [user, setUser] = useState<string>(""); // Estado para o usuário
     const [password, setPassword] = useState<string>(""); // Estado para a senha
+    const [token, setToken] = useState<string | null>(null);
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -20,10 +24,24 @@ export const LoginPage = () => {
     };
 
     // Função para tratar o envio do formulário
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("Usuário:", user);
         console.log("Senha:", password);
+
+        try {
+            const response = await axiosInstance.post('/login', {
+                user,
+                password,
+            });
+
+            setToken(response.data.token);
+            localStorage.setItem("token", response.data.token);
+            setError('');
+            navigate("/home");
+        } catch (err) {
+            setError('Usuário ou senha incorreta!');
+        }
     };
 
     return (
@@ -55,7 +73,7 @@ export const LoginPage = () => {
                 </label>
 
                 <button
-                    type="submit" // Altera para "submit" para enviar o formulário
+                    type="submit"
                 >
                     Entrar
                 </button>
