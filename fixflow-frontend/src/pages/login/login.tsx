@@ -1,17 +1,24 @@
 // src/pages/login/login.tsx
 import axiosInstance from '../../api/axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../contexts/authenticate';
+
 
 
 export const LoginPage = () => {
 
     const [user, setUser] = useState<string>(""); // Estado para o usuário
     const [password, setPassword] = useState<string>(""); // Estado para a senha
-    const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState('');
 
-    const navigate = useNavigate();
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        return null;
+    }
+
+    const { login } = authContext;
+
 
     // Função para atualizar o estado do usuário
     const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +42,9 @@ export const LoginPage = () => {
                 password,
             });
 
-            setToken(response.data.token);
+            login(response.data.token);
             localStorage.setItem("token", response.data.token);
             setError('');
-            navigate("/home");
         } catch (err) {
             setError('Usuário ou senha incorreta!');
         }
