@@ -3,7 +3,7 @@ import { AuthContext } from "../../contexts/authenticate";
 
 
 const HomePage: React.FC = () => {
-  
+
   const authContext = useContext(AuthContext);
 
   if (!authContext) {

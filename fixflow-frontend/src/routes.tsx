@@ -17,11 +17,10 @@ function RoutesApp() {
     
     return (
         <Routes>
-            <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+            <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <LoginPage />} />
-            <Route path="*" element={isAuthenticated ? <HomePage /> : <LoginPage />} />     
+            <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/login" />} />
-            
         </Routes>
     );
 }
