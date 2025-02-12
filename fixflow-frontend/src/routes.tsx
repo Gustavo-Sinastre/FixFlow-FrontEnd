@@ -19,7 +19,7 @@ function RoutesApp() {
         <Routes>
             <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <LoginPage />} />
-            <Route path="/home" element={<HomePage />} />            
+            <Route path="*" element={isAuthenticated ? <HomePage /> : <LoginPage />} />     
             <Route path="*" element={<Navigate to="/login" />} />
             
         </Routes>
